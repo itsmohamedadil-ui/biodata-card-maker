@@ -154,29 +154,45 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   padding: 60px 56px 40px 92px; background: #fdfdfc; color: #1d2433; font-family: "Source Serif 4", "Crimson Pro", Georgia, serif; }
 .md-bar { position: absolute; left: 0; top: 0; width: 44px; height: 740px; background: var(--ink); border-bottom-right-radius: 44px 190px; }
 .md-leaf { position: absolute; top: 26px; right: 22px; width: 260px; height: 210px; }
-.md-name { margin: 50px 0 0; max-width: 620px; font-size: 84px; line-height: 1.05; font-weight: 500; color: var(--ink); }
+.md-name { margin: 54px 0 0; max-width: 620px; font-size: 76px; line-height: 1.06; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
 .md-uline { width: 104px; height: 4px; margin-top: 16px; border-radius: 2px; background: var(--ink); }
 .md-head { display: flex; align-items: center; margin: 34px 0 14px; }
 .md-ico { position: relative; z-index: 1; flex: none; width: 58px; height: 58px; border-radius: 50%; background: var(--ink); display: flex; align-items: center; justify-content: center; }
 .md-ico svg { width: 28px; height: 28px; }
 .md-pill { flex: 1; min-width: 0; margin-left: -20px; padding: 10px 18px 10px 46px; border-radius: 10px; background: #efedea;
-  font-size: 23px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); white-space: nowrap; overflow: hidden; }
-.md-kv { display: grid; grid-template-columns: 270px 36px minmax(0, 1fr); row-gap: 5px; padding-left: 24px; font-size: 24px; }
-.md-kv .c { text-align: center; } .md-kv .v { white-space: pre-line; } .md-kv .v.hl { font-weight: 700; }
+  font-size: 19px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--ink); white-space: nowrap; overflow: hidden; }
+.md-kv { display: grid; grid-template-columns: 250px 32px minmax(0, 1fr); row-gap: 7px; padding-left: 24px; font-size: 22px; line-height: 1.3; }
+.md-kv .k { color: #4a5266; } .md-kv .c { text-align: center; color: #8a90a0; }
+.md-kv .v { white-space: pre-line; color: #141a29; font-weight: 500; } .md-kv .v.hl { font-weight: 700; color: var(--ink); }
 .md-rule { height: 1px; margin-top: 26px; background: #d5d3cf; }
 .md-cols { display: grid; grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); column-gap: 30px; }
 .md-vrule { background: #c9cbd4; margin-top: 30px; }
 .md-col { min-width: 0; }
 .md-col .md-head { margin-top: 30px; }
-.md-col .md-kv { grid-template-columns: max-content 28px minmax(0, 1fr); padding-left: 16px; font-size: 22px; }
-.md-col p { margin: 0; padding-left: 16px; font-size: 23px; line-height: 1.38; white-space: pre-line; }
-.md-col p strong { font-weight: 700; }
+.md-col .md-kv { grid-template-columns: max-content 26px minmax(0, 1fr); padding-left: 16px; font-size: 20px; }
+.md-col p { margin: 0; padding-left: 16px; font-size: 21px; line-height: 1.45; color: #2a3142; white-space: pre-line; }
+.md-col p strong { font-size: 22px; font-weight: 700; color: var(--ink); }
 .md-spacer { flex: 1; min-height: 34px; }
 .md-contact { margin: 0 -24px 0 -48px; padding: 20px 30px; border-radius: 18px; background: var(--ink); color: #fff;
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 22px; font-size: 24px; }
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 22px; font-size: 21px; letter-spacing: .01em; }
 .md-contact > span { display: flex; align-items: center; gap: 12px; }
 .md-contact svg { width: 30px; height: 30px; flex: none; }
 .md-contact .sep { width: 1px; height: 36px; background: rgba(255, 255, 255, .5); }
+
+/* Classic type scale: name leads, one step down for title, details at a calm reading size. */
+.bd-name { font-size: 64px; letter-spacing: .01em; }
+.bd-title { font-size: 31px; padding: 5px 42px 7px; }
+.bd-inst { font-size: 24px; font-weight: 600; letter-spacing: .02em; }
+.bd-tag { font-size: 24px; font-weight: 500; line-height: 1.3; }
+.bd-badge { font-size: 27px; padding: 4px 36px 6px; letter-spacing: .01em; }
+.bd-box > .bd-badge { top: -23px; }
+.bd-pgrid { font-size: 23px; line-height: 1.35; }
+.bd-kv .k { font-weight: 500; } .bd-kv .v { font-weight: 600; }
+.bd-edu { font-size: 22px; font-weight: 500; } .bd-edu .r > div:last-child { font-weight: 600; } .bd-edu .r.hl > div:last-child { font-weight: 700; }
+.bd-sec p { font-size: 23px; font-weight: 500; line-height: 1.35; } .bd-sec p.big { font-size: 27px; font-weight: 700; }
+.bd-mini > .bd-badge { font-size: 24px; top: -21px; padding-inline: 26px; }
+.bd-mini p { font-size: 24px; }
+.bd-closing { font-size: 25px; font-weight: 500; line-height: 1.3; }
 </style>
 
 <header class="bar">
@@ -221,46 +237,18 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   const SAMPLE = {
     design: "modern",
     style: "navy",
-    name: "Ahmed Rashid",
-    title: "Assistant Professor of English",
-    institution: "Government Arts College, Kozhikode",
-    tagline: "A simple, sincere and family-oriented person,\nwith a love for teaching and reading.",
+    name: "", title: "", institution: "", tagline: "",
     personalHeading: "Personal Details",
-    personal: [
-      { k: "Date of Birth", v: "12 March 1995" }, { k: "Age", v: "31 Years" }, { k: "Height", v: "172 cm (5 ft 8 in)" },
-      { k: "Religion", v: "Islam" }, { k: "Sect", v: "Sunni" }, { k: "Nationality", v: "Indian" },
-      { k: "Place of Birth", v: "Kozhikode, Kerala" }, { k: "Residence", v: "Feroke, Kozhikode" }
-    ],
+    personal: ["Date of Birth", "Age", "Height", "Religion", "Nationality", "Place of Birth", "Residence"].map(k => ({ k, v: "" })),
     eduHeading: "Education & Qualifications",
-    education: [
-      { k: "Graduation", v: "BA", hl: false }, { k: "Post Graduation", v: "MA English", hl: false },
-      { k: "Teacher Training", v: "B.Ed", hl: false }, { k: "UGC-NET", v: "Qualified", hl: true }
-    ],
-    family: [ { k: "Father", v: "Abdul Rahman" }, { k: "Mother", v: "Fathima" }, { k: "Siblings", v: "2 Brothers, 1 Sister" } ],
-    aboutFamily: "A close-knit, religious and value-oriented family based in Kozhikode, Kerala.",
-    phone: "+91 98765 43210",
-    email: "ahmed.rashid@example.com",
-    sections: [
-      { h: "My Profession", t: "Assistant Professor of English", big: true },
-      { h: "My Nature", t: "By nature, I am a calm and down-to-earth person.\nI love reading, travelling and guiding students.", big: false },
-      { h: "My Family", t: "I come from a respectable and supportive family\nfrom Kozhikode, who have always encouraged me.", big: false }
-    ],
-    boxes: [
-      { h: "Siblings", t: "2 Brothers & 1 Sister", phone: false },
-      { h: "Contact Details", t: "+91 98765 43210", phone: true }
-    ],
-    closing: "I would be happy to have a life partner\nwho shares these values and walks together in life."
+    education: ["Graduation", "Post Graduation"].map(k => ({ k, v: "", hl: false })),
+    family: ["Father", "Mother", "Siblings"].map(k => ({ k, v: "" })),
+    aboutFamily: "", phone: "", email: "",
+    sections: [{ h: "My Nature", t: "", big: false }, { h: "My Family", t: "", big: false }],
+    boxes: [{ h: "Siblings", t: "", phone: false }, { h: "Contact Details", t: "", phone: true }],
+    closing: ""
   };
-  const blank = () => {
-    const s = clone(SAMPLE);
-    s.name = s.title = s.institution = s.tagline = s.closing = s.aboutFamily = s.phone = s.email = "";
-    s.personal.forEach(r => r.v = "");
-    s.family.forEach(r => r.v = "");
-    s.education.forEach(r => { r.v = ""; });
-    s.sections.forEach(r => r.t = "");
-    s.boxes.forEach(r => r.t = "");
-    return s;
-  };
+  const blank = () => clone(SAMPLE);
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   const newId = () => "b" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -351,7 +339,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
         const pick = profiles.find(p => p.id === last) || profiles[0];
         openProfile(pick);
       } else if (cur.isSample) {
-        setStatus("This is a sample card. Change anything and it becomes your first saved biodata.");
+        setStatus("Fill in the details. Your biodata saves as you type.");
       } else setStatus(store.mode === "cloud" ? "Saved to your account." : "Saved on this device only.");
     }
     renderSelect();
@@ -359,7 +347,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   function renderSelect() {
     const sel = $("profileSelect");
     const opts = profiles.map(p => `<option value="${esc(p.id)}">${esc(labelOf(p.id === cur.id ? cur.state : p.state))}</option>`);
-    if (!profiles.some(p => p.id === cur.id)) opts.unshift(`<option value="${esc(cur.id)}">${esc(labelOf(cur.state))}${cur.isSample ? " (sample)" : " (unsaved)"}</option>`);
+    if (!profiles.some(p => p.id === cur.id)) opts.unshift(`<option value="${esc(cur.id)}">${esc(labelOf(cur.state))}${cur.isSample ? " (new)" : " (unsaved)"}</option>`);
     sel.innerHTML = opts.join("");
     sel.value = cur.id;
   }
@@ -385,8 +373,8 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   const field = (path, label, value, multi) => {
     const id = "f-" + path.replace(/\./g, "-");
     return `<label class="f" for="${id}">${esc(label)}${multi
-      ? `<textarea id="${id}" data-path="${path}" rows="2">${esc(value)}</textarea>`
-      : `<input type="text" id="${id}" data-path="${path}" value="${esc(value)}">`}</label>`;
+      ? `<textarea id="${id}" data-path="${path}" rows="2" placeholder="Type here">${esc(value)}</textarea>`
+      : `<input type="text" id="${id}" data-path="${path}" value="${esc(value)}" placeholder="Type here">`}</label>`;
   };
   const inp = (path, value, ph) => `<input type="text" id="f-${path.replace(/\./g, "-")}" data-path="${path}" value="${esc(value)}" placeholder="${esc(ph)}" aria-label="${esc(ph)}">`;
   const openState = {};
@@ -396,7 +384,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   }
   function renderEditor() {
     const s = cur.state, ed = $("editor");
-    const sampleNote = cur.isSample ? `<p class="note">These are example details. Replace them with the real person's details; your card saves as you type.</p>` : "";
+    const sampleNote = cur.isSample ? `<p class="note">Fill in the person's details below. The card saves as you type; add or remove rows to suit.</p>` : "";
     const personal = s.personal.map((r, i) => `<div class="row">${inp(`personal.${i}.k`, r.k, "Label")}${inp(`personal.${i}.v`, r.v, "Detail")}<button class="x" type="button" data-act="del" data-list="personal" data-i="${i}" aria-label="Remove row">×</button></div>`).join("");
     const edu = s.education.map((r, i) => `<div class="row hl">${inp(`education.${i}.k`, r.k, "Qualification")}${inp(`education.${i}.v`, r.v, "Detail")}<label class="check"><input type="checkbox" data-path="education.${i}.hl" id="f-education-${i}-hl"${r.hl ? " checked" : ""}>Highlight</label><button class="x" type="button" data-act="del" data-list="education" data-i="${i}" aria-label="Remove row">×</button></div>`).join("");
     const secs = s.sections.map((r, i) => `<div class="block"><div class="block-head">${inp(`sections.${i}.h`, r.h, "Heading")}<button class="x" type="button" data-act="del" data-list="sections" data-i="${i}" aria-label="Remove section">×</button></div><textarea id="f-sections-${i}-t" data-path="sections.${i}.t" rows="2" aria-label="Section text">${esc(r.t)}</textarea><label class="check"><input type="checkbox" data-path="sections.${i}.big" id="f-sections-${i}-big"${r.big ? " checked" : ""}>Larger bold text</label></div>`).join("");
