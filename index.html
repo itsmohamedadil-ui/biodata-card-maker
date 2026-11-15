@@ -700,16 +700,17 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
         const inClaude = !!(window.claude && window.claude.use);
         const file = blob && new File([blob], fileName(), { type: "image/png" });
         const canShare = !inClaude && file && navigator.canShare && navigator.canShare({ files: [file] });
-        $("modalDownload").hidden = inClaude;
+        // iPhone/iPad: Photos is only reachable through the share sheet's "Save Image" (or press-and-hold).
+        // A download would land in the Files app, so Apple devices get no download button at all.
+        const apple = isApple();
+        $("modalDownload").hidden = inClaude || apple;
         $("modalShare").hidden = !canShare;
         $("modalDownload").classList.toggle("primary", !canShare);
-        // iPhone/iPad: Photos is only reachable through the share sheet's "Save Image"; a download lands in the Files app.
-        const apple = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-        $("modalShare").textContent = apple ? "Save to Photos / Share" : "Share (WhatsApp, etc.)";
-        $("modalDownload").textContent = apple ? "Save to Files" : "Download image";
+        $("modalShare").textContent = apple ? "Save to Photos" : "Share (WhatsApp, etc.)";
+        $("modalDownload").textContent = "Download image";
         $("modalNote").textContent = inClaude ? "Press and hold the image, then choose Save or Share."
-          : apple ? (canShare ? "To save to Photos: tap “Save to Photos / Share”, then choose “Save Image”. Or press and hold the image and choose “Save to Photos”."
-                              : "Press and hold the image, then choose “Save to Photos”.")
+          : apple ? (canShare ? "Tap “Save to Photos”, then choose “Save Image” in the menu that opens. The card goes into your Photos."
+                              : "Press and hold the image above, then choose “Save to Photos”.")
           : "Download the image, or share it straight to WhatsApp.";
         $("modalImg").src = canvas.toDataURL("image/png");
         $("modal").hidden = false;
@@ -721,6 +722,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     }
   });
   let lastBlob = null;
+  function isApple() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
   $("modalDownload").addEventListener("click", () => {
     if (!lastBlob) return;
     const url = URL.createObjectURL(lastBlob), a = document.createElement("a");
@@ -730,8 +732,9 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   });
   $("modalShare").addEventListener("click", async () => {
     if (!lastBlob) return;
-    try { await navigator.share({ files: [new File([lastBlob], fileName(), { type: "image/png" })], title: labelOf(cur.state) + " biodata" }); }
-    catch (e) { if (!e || e.name !== "AbortError") setStatus("Sharing isn't available here. Use Download instead."); }
+    // Image only: adding a title or text makes iOS treat it as mixed content and can drop "Save Image" from the menu.
+    try { await navigator.share({ files: [new File([lastBlob], fileName(), { type: "image/png" })] }); }
+    catch (e) { if (!e || e.name !== "AbortError") setStatus(isApple() ? "Press and hold the image, then choose “Save to Photos”." : "Sharing isn't available here. Use Download instead."); }
   });
   $("modalClose").addEventListener("click", () => { $("modal").hidden = true; $("modalImg").removeAttribute("src"); });
 
