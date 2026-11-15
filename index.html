@@ -193,6 +193,13 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
 .bd-mini > .bd-badge { font-size: 24px; top: -21px; padding-inline: 26px; }
 .bd-mini p { font-size: 24px; }
 .bd-closing { font-size: 25px; font-weight: 500; line-height: 1.3; }
+
+/* Optional second line under a family member (house name / address). */
+.md-kv .sub, .bd-kv .sub { display: block; margin: 1px 0 4px; font-size: .8em; line-height: 1.3; }
+.md-kv .sub { color: #5a6275; font-weight: 400; }
+.bd-kv .sub { font-weight: 500; font-style: italic; opacity: .8; }
+.frow { display: flex; flex-direction: column; gap: 6px; padding-bottom: 8px; border-bottom: 1px dashed var(--line); }
+.frow > input { font-size: 14px; }
 </style>
 
 <header class="bar">
@@ -242,7 +249,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     personal: ["Date of Birth", "Age", "Height", "Religion", "Nationality", "Place of Birth", "Residence"].map(k => ({ k, v: "" })),
     eduHeading: "Education & Qualifications",
     education: ["Graduation", "Post Graduation"].map(k => ({ k, v: "", hl: false })),
-    family: ["Father", "Mother", "Siblings"].map(k => ({ k, v: "" })),
+    family: ["Father", "Mother", "Siblings"].map(k => ({ k, v: "", sub: "" })),
     aboutFamily: "", phone: "", email: "",
     sections: [{ h: "My Nature", t: "", big: false }, { h: "My Family", t: "", big: false }],
     boxes: [{ h: "Siblings", t: "", phone: false }, { h: "Contact Details", t: "", phone: true }],
@@ -391,7 +398,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     const boxes = s.boxes.slice(0, 2).map((r, i) => `<div class="block">${inp(`boxes.${i}.h`, r.h, "Heading")}<textarea id="f-boxes-${i}-t" data-path="boxes.${i}.t" rows="1" aria-label="Box text">${esc(r.t)}</textarea><label class="check"><input type="checkbox" data-path="boxes.${i}.phone" id="f-boxes-${i}-phone"${r.phone ? " checked" : ""}>Show phone icon</label></div>`).join("");
     const modern = s.design !== "classic";
     const pick = (path, label, opts, value) => `<label class="f" for="f-${path}">${esc(label)}<select id="f-${path}" data-path="${path}">${opts.map(([k, v]) => `<option value="${k}"${value === k ? " selected" : ""}>${esc(v)}</option>`).join("")}</select></label>`;
-    const family = s.family.map((r, i) => `<div class="row">${inp(`family.${i}.k`, r.k, "Label")}${inp(`family.${i}.v`, r.v, "Detail")}<button class="x" type="button" data-act="del" data-list="family" data-i="${i}" aria-label="Remove row">×</button></div>`).join("");
+    const family = s.family.map((r, i) => `<div class="frow"><div class="row">${inp(`family.${i}.k`, r.k, "Label")}${inp(`family.${i}.v`, r.v, "Name / detail")}<button class="x" type="button" data-act="del" data-list="family" data-i="${i}" aria-label="Remove row">×</button></div>${inp(`family.${i}.sub`, r.sub, "House name / address (optional)")}</div>`).join("");
     ed.innerHTML = sampleNote +
       group("design", "Card design",
         pick("design", "Design", [["modern", "Modern (white)"], ["classic", "Classic arch (gold)"]], modern ? "modern" : "classic") +
@@ -519,7 +526,8 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     return `<svg class="md-leaf" viewBox="0 0 260 210" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#9c8a69" stroke-width="1.6" stroke-linejoin="round"><path d="${d}"/>${leaves}</g></svg>`;
   })();
   const has = v => v && String(v).trim();
-  const mdKV = rows => rows.map(r => `<div class="k">${esc(r.k)}</div><div class="c">:</div><div class="v${r.hl ? " hl" : ""}">${val(r.v, "—")}</div>`).join("");
+  const subLine = r => has(r.sub) ? `<span class="sub">${esc(r.sub)}</span>` : "";
+  const mdKV = rows => rows.map(r => `<div class="k">${esc(r.k)}</div><div class="c">:</div><div class="v${r.hl ? " hl" : ""}">${val(r.v, "—")}${subLine(r)}</div>`).join("");
   const mdHead = (k, title) => `<div class="md-head"><span class="md-ico">${icon(k)}</span><span class="md-pill">${esc(title)}</span></div>`;
   function modernHTML(s) {
     const t = themeOf(s);
@@ -546,7 +554,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   function classicHTML(s) {
     s = Object.assign({}, s, { personal: s.personal.concat((s.family || []).filter(r => has(r.v))) });
     const half = Math.ceil(s.personal.length / 2);
-    const kv = rows => rows.map(r => `<div class="k">${esc(r.k)}</div><div class="c">:</div><div class="v">${val(r.v, "—")}</div>`).join("");
+    const kv = rows => rows.map(r => `<div class="k">${esc(r.k)}</div><div class="c">:</div><div class="v">${val(r.v, "—")}${subLine(r)}</div>`).join("");
     const edu = s.education.map(r => `<div class="r${r.hl ? " hl" : ""}"><div>${esc(r.k)}</div><div class="c">:</div><div>${val(r.v, "—")}</div></div>`).join("");
     const secs = s.sections.filter(r => (r.h || "").trim() || (r.t || "").trim()).map(r =>
       `<div class="bd-sec"><div class="bd-rule"><span class="bd-badge">${esc(r.h)}</span></div><p class="${r.big ? "big" : ""}">${val(r.t, "…")}</p></div>`).join("");
