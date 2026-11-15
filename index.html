@@ -703,7 +703,14 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
         $("modalDownload").hidden = inClaude;
         $("modalShare").hidden = !canShare;
         $("modalDownload").classList.toggle("primary", !canShare);
-        $("modalNote").textContent = inClaude ? "Press and hold the image, then choose Save or Share." : "Download the image, or share it straight to WhatsApp.";
+        // iPhone/iPad: Photos is only reachable through the share sheet's "Save Image"; a download lands in the Files app.
+        const apple = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+        $("modalShare").textContent = apple ? "Save to Photos / Share" : "Share (WhatsApp, etc.)";
+        $("modalDownload").textContent = apple ? "Save to Files" : "Download image";
+        $("modalNote").textContent = inClaude ? "Press and hold the image, then choose Save or Share."
+          : apple ? (canShare ? "To save to Photos: tap “Save to Photos / Share”, then choose “Save Image”. Or press and hold the image and choose “Save to Photos”."
+                              : "Press and hold the image, then choose “Save to Photos”.")
+          : "Download the image, or share it straight to WhatsApp.";
         $("modalImg").src = canvas.toDataURL("image/png");
         $("modal").hidden = false;
       }
