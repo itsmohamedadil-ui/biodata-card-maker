@@ -84,11 +84,36 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
 .modal-card { background: var(--panel); border-radius: 14px; padding: 14px; max-width: 520px; width: 100%; max-height: 100%; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
 .modal-card img { width: 100%; border-radius: 6px; }
 
+.dock { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; gap: 8px; background: var(--panel); border-top: 1px solid var(--line);
+  padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.dock button { flex: 1; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); font-weight: 600; font-size: 15px; }
+.dock button[aria-selected="true"] { background: var(--soft); border-color: var(--accent); color: var(--fg); }
+.dock .primary { flex: 1.3; background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+
 @media (max-width: 860px) {
-  .tabs { display: flex; }
-  .main { grid-template-columns: minmax(0, 1fr); }
+  .dock { display: flex; }
+  .tabs, #saveImgBtn, .brand small { display: none; }
+  .bar { padding-block: 8px; gap: 6px; }
+  .brand { font-size: 14px; }
+  .picker { width: 100%; flex-wrap: nowrap; }
+  .picker select { flex: 1; min-width: 0; max-width: none; }
+  .picker .btn { padding: 9px 11px; }
+  .status { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .main { grid-template-columns: minmax(0, 1fr); padding-block: 14px calc(96px + env(safe-area-inset-bottom, 0px)); }
   .preview { position: static; }
   body[data-tab="edit"] .preview, body[data-tab="preview"] .editor { display: none; }
+  input[type="text"], textarea, select { font-size: 16px; min-height: 46px; }
+  textarea { min-height: 76px; }
+  summary { padding: 15px 16px; font-size: 16px; }
+  .fields { padding: 0 12px 14px; }
+  .row { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) auto; }
+  .row.hl { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr) auto; }
+  .row.hl .check { grid-column: 1 / -1; order: 5; }
+  .x { font-size: 24px; padding: 8px 10px; }
+  .add { padding: 11px 14px; font-size: 15px; }
+  .check { font-size: 14px; } .check input { width: 20px; height: 20px; }
+  .hint { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
@@ -207,7 +232,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   <div class="picker">
     <select id="profileSelect" aria-label="Saved biodatas"></select>
     <button class="btn" id="newBtn" type="button">New</button>
-    <button class="btn" id="dupBtn" type="button">Duplicate</button>
+    <button class="btn" id="dupBtn" type="button" title="Copy this biodata for another person">Copy</button>
     <button class="btn danger" id="delBtn" type="button">Delete</button>
     <button class="btn primary" id="saveImgBtn" type="button">Save image</button>
   </div>
@@ -226,13 +251,19 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   </section>
 </main>
 
+<nav class="dock" aria-label="Actions">
+  <button type="button" id="dockEdit" aria-selected="true">Edit</button>
+  <button type="button" id="dockPreview" aria-selected="false">Preview</button>
+  <button type="button" id="dockSave" class="primary">Save image</button>
+</nav>
+
 <div class="modal" id="modal" hidden>
   <div class="modal-card">
     <strong id="modalTitle">Your card</strong>
     <p class="note" id="modalNote">Press and hold the image, then choose Save or Share.</p>
     <img id="modalImg" alt="Biodata card image">
-    <button class="btn primary" id="modalDownload" type="button" hidden>Download image</button>
-    <button class="btn" id="modalShare" type="button" hidden>Share (WhatsApp, etc.)</button>
+    <button class="btn primary" id="modalShare" type="button" hidden>Share (WhatsApp, etc.)</button>
+    <button class="btn" id="modalDownload" type="button" hidden>Download image</button>
     <button class="btn" id="modalClose" type="button">Close</button>
   </div>
 </div>
@@ -612,7 +643,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   $("delBtn").addEventListener("click", async () => {
     const b = $("delBtn");
     if (!b.classList.contains("armed")) {
-      b.classList.add("armed"); b.textContent = "Tap again to delete";
+      b.classList.add("armed"); b.textContent = "Tap again";
       clearTimeout(armTimer); armTimer = setTimeout(() => { b.classList.remove("armed"); b.textContent = "Delete"; }, 3500);
       return;
     }
@@ -628,12 +659,18 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
 
   // ---------- tabs (phone) ----------
   function showTab(t) {
+    const changed = document.body.dataset.tab && document.body.dataset.tab !== t;
     document.body.dataset.tab = t;
     $("tabEdit").setAttribute("aria-selected", t === "edit"); $("tabPreview").setAttribute("aria-selected", t === "preview");
+    $("dockEdit").setAttribute("aria-selected", t === "edit"); $("dockPreview").setAttribute("aria-selected", t === "preview");
     if (t === "preview") requestAnimationFrame(fit);
+    if (changed) window.scrollTo(0, 0);
   }
   $("tabEdit").addEventListener("click", () => showTab("edit"));
   $("tabPreview").addEventListener("click", () => showTab("preview"));
+  $("dockEdit").addEventListener("click", () => showTab("edit"));
+  $("dockPreview").addEventListener("click", () => showTab("preview"));
+  $("dockSave").addEventListener("click", () => $("saveImgBtn").click());
   showTab("edit");
 
   // ---------- export ----------
@@ -642,7 +679,8 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
   $("saveImgBtn").addEventListener("click", async () => {
     const btn = $("saveImgBtn");
     if (typeof html2canvas !== "function") { setStatus("The image tool didn't load. Reload the page and try again."); return; }
-    btn.disabled = true; const old = btn.textContent; btn.textContent = "Making image…";
+    const dock = $("dockSave");
+    btn.disabled = dock.disabled = true; const old = btn.textContent; btn.textContent = dock.textContent = "Making image…";
     const host = document.createElement("div");
     host.style.cssText = "position:fixed;left:-12000px;top:0;width:900px;pointer-events:none;";
     host.innerHTML = cardHTML(cur.state);
@@ -663,6 +701,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
         const canShare = !inClaude && file && navigator.canShare && navigator.canShare({ files: [file] });
         $("modalDownload").hidden = inClaude;
         $("modalShare").hidden = !canShare;
+        $("modalDownload").classList.toggle("primary", !canShare);
         $("modalNote").textContent = inClaude ? "Press and hold the image, then choose Save or Share." : "Download the image, or share it straight to WhatsApp.";
         $("modalImg").src = canvas.toDataURL("image/png");
         $("modal").hidden = false;
@@ -670,7 +709,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     } catch (e) {
       setStatus("Couldn't make the image. Try again.");
     } finally {
-      host.remove(); btn.disabled = false; btn.textContent = old;
+      host.remove(); btn.disabled = dock.disabled = false; btn.textContent = dock.textContent = old;
     }
   });
   let lastBlob = null;
