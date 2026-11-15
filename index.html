@@ -663,7 +663,7 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
     document.body.dataset.tab = t;
     $("tabEdit").setAttribute("aria-selected", t === "edit"); $("tabPreview").setAttribute("aria-selected", t === "preview");
     $("dockEdit").setAttribute("aria-selected", t === "edit"); $("dockPreview").setAttribute("aria-selected", t === "preview");
-    if (t === "preview") requestAnimationFrame(fit);
+    if (t === "preview") { fit(); requestAnimationFrame(fit); }
     if (changed) window.scrollTo(0, 0);
   }
   $("tabEdit").addEventListener("click", () => showTab("edit"));
