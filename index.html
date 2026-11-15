@@ -675,7 +675,8 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.4; }
 
   // ---------- export ----------
   let downloads = null;
-  const fileName = () => (labelOf(cur.state).replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-") || "biodata") + "-biodata.png";
+  // File is named exactly as the full name typed (only characters phones and PCs refuse in filenames are dropped).
+  const fileName = () => ((cur.state.name || "").replace(/[\\/:*?"<>|\u0000-\u001f]+/g, "").replace(/\s+/g, " ").trim() || "Biodata") + ".png";
   $("saveImgBtn").addEventListener("click", async () => {
     const btn = $("saveImgBtn");
     if (typeof html2canvas !== "function") { setStatus("The image tool didn't load. Reload the page and try again."); return; }
